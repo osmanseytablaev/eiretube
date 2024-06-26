@@ -1,54 +1,66 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import './Register.css';
 
 function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleRegister = async () => {
+    const handleRegister = async (e) => {
+        e.preventDefault();
         try {
-            console.log('Registering with:', { username, password });
-            const response = await axios.post('http://localhost:5000/api/register', { username, password });
-            const { token } = response.data;
-            localStorage.setItem('token', token);  // Store token in local storage
-            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-            alert('Registration successful');
-            navigate('/');  // Redirect to home page
+            const response = await axios.post('http://localhost:5000/api/auth/register', {
+                username,
+                password,
+            });
+            localStorage.setItem('token', response.data.token);
+            navigate('/'); // Redirect to home after successful registration
         } catch (error) {
-            alert('Registration failed');
-            console.error('Error during registration:', error.response ? error.response.data : error.message);
+            console.error('Error during registration:', error);
+            alert('Registration failed. Please try again.');
         }
     };
 
     return (
-        <div>
+        <div className="register-container">
             <h2>Register</h2>
-            <div>
-                <label>Username</label>
-                <input
-                    type="text"
-                    placeholder="Username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                />
-            </div>
-            <div>
-                <label>Password</label>
-                <input
-                    type="password"
-                    placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
-            </div>
-            <button onClick={handleRegister}>Register</button>
+            <form onSubmit={handleRegister}>
+                <label>
+                    Username:
+                    <input
+                        type="text"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                    />
+                </label>
+                <label>
+                    Password:
+                    <input
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                </label>
+                <button type="submit">Register</button>
+            </form>
         </div>
     );
 }
 
 export default Register;
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,0 +1,28 @@
+.homepage-container {
+    padding: 20px;
+}
+
+.video-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.video-item {
+    width: calc(33.333% - 20px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    text-align: center;
+}
+
+.video-item img {
+    width: 100%;
+    height: auto;
+}
+
+.video-item div {
+    padding: 10px;
+    font-weight: bold;
+}
+

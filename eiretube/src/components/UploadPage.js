@@ -1,52 +1,77 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import LoadingSpinner from './LoadingSpinner';
+import './UploadPage.css';
 
 function UploadPage() {
     const [title, setTitle] = useState('');
-    const [file, setFile] = useState(null);
-    const [uploadProgress, setUploadProgress] = useState(0);
-    const [error, setError] = useState('');
+    const [thumbnail, setThumbnail] = useState(null);
+    const [video, setVideo] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [message, setMessage] = useState('');
 
-    const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-    };
+    const handleUpload = async (e) => {
+        e.preventDefault();
+        setLoading(true); // Show loading spinner
+        setMessage(''); // Clear any previous messages
 
-    const handleUpload = async () => {
         const formData = new FormData();
-        formData.append('video', file);
         formData.append('title', title);
+        formData.append('thumbnail', thumbnail);
+        formData.append('video', video);
 
         try {
-            await axios.post('/api/upload', formData, {
+            const response = await axios.post('http://localhost:5000/api/videos', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
-                onUploadProgress: (progressEvent) => {
-                    const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-                    setUploadProgress(percentCompleted);
-                },
             });
-            alert('Upload successful');
+            console.log('Video uploaded successfully', response.data);
+            setMessage('Video uploaded successfully!');
         } catch (error) {
-            setError('Upload failed. Please try again.');
+            console.error('Error uploading video:', error);
+            setMessage('Error uploading video. Please try again.');
+        } finally {
+            setLoading(false); // Hide loading spinner
         }
     };
 
     return (
-        <div>
-            <h2>Upload Video</h2>
-            <input
-                type="text"
-                placeholder="Title"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-            />
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleUpload}>Upload</button>
-            {uploadProgress > 0 && <div>Upload Progress: {uploadProgress}%</div>}
-            {error && <div style={{ color: 'red' }}>{error}</div>}
+        <div className="upload-page">
+            {loading && <LoadingSpinner />}
+            <h1>Upload Video</h1>
+            <form onSubmit={handleUpload}>
+                <label>
+                    Title:
+                    <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                </label>
+                <br />
+                <label>
+                    Thumbnail:
+                    <input type="file" onChange={(e) => setThumbnail(e.target.files[0])} accept="image/*" required />
+                </label>
+                <br />
+                <label>
+                    Video:
+                    <input type="file" onChange={(e) => setVideo(e.target.files[0])} accept="video/*" required />
+                </label>
+                <br />
+                <button type="submit">Upload</button>
+            </form>
+            {message && <p>{message}</p>}
         </div>
     );
 }
 
 export default UploadPage;
+
+
+
+
+
+
+
+
+
+
+
