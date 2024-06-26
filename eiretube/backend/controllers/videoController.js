@@ -12,60 +12,76 @@ aws.config.update({
 
 const s3 = new aws.S3();
 
+
 exports.uploadVideo = async (req, res) => {
+    const { title } = req.body;
+    const thumbnail = req.files['thumbnail'][0];
+    const video = req.files['video'][0];
+
+    const uploadParams = (file, key) => ({
+        Bucket: process.env.AWS_BUCKET_NAME,
+        Key: key,
+        Body: file.buffer,
+        ContentType: file.mimetype,
+    });
+
     try {
-        const file = req.file;
-        const stream = fs.createReadStream(file.path);
+        const thumbnailData = await s3.upload(uploadParams(thumbnail, `thumbnails/${Date.now()}-${thumbnail.originalname}`)).promise();
+        const videoData = await s3.upload(uploadParams(video, `videos/${Date.now()}-${video.originalname}`)).promise();
 
-        const uploadParams = {
-            Bucket: process.env.AWS_BUCKET_NAME,
-            Key: `videos/${Date.now()}_${path.basename(file.path)}`,
-            Body: stream,
-            ContentType: file.mimetype,
-        };
-
-        s3.upload(uploadParams, async (err, data) => {
-            if (err) {
-                return res.status(500).json({ error: err.message });
-            }
-
-            const video = new Video({
-                title: file.originalname,
-                url: data.Location,
-            });
-
-            await video.save();
-            res.status(201).json(video);
+        const newVideo = new Video({
+            title,
+            thumbnailUrl: thumbnailData.Location,
+            videoUrl: videoData.Location,
         });
+
+        await newVideo.save();
+        res.status(200).json(newVideo);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Error uploading video:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
 
-exports.getVideos = async (req, res) => {
+exports.getAllVideos = async (req, res) => {
     try {
         const videos = await Video.find();
-        res.status(200).json(videos);
+        res.json(videos);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).json({ error: 'Server error' });
     }
 };
+
 
 exports.getVideoById = async (req, res) => {
+    console.log('Fetching video with ID:', req.params.id);
     try {
         const video = await Video.findById(req.params.id);
-        res.status(200).json(video);
+        if (!video) {
+            console.log('Video not found');
+            return res.status(404).json({ error: 'Video not found' });
+        }
+        console.log('Video found:', video);
+        res.json(video);
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        console.error('Server error:', error);
+        res.status(500).json({ error: 'Server error' });
     }
 };
 
-exports.searchVideos = async (req, res) => {
-    try {
-        const query = req.query.query;
-        const videos = await Video.find({ title: new RegExp(query, 'i') });
-        res.status(200).json(videos);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

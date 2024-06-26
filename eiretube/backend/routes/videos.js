@@ -1,14 +1,26 @@
 const express = require('express');
-const multer = require('multer');
-const { uploadVideo, getVideos, getVideoById, searchVideos } = require('../controllers/videoController');
-const authenticate = require('../middleware/authenticate');
+const { uploadVideo, getVideos, getVideoById, getAllVideos} = require('../controllers/videoController');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
-const upload = multer({ dest: 'uploads/' });
 
-router.post('/upload', authenticate, upload.single('video'), uploadVideo);
-router.get('/videos', getVideos);
-router.get('/videos/:id', getVideoById);
-router.get('/videos/search', searchVideos);
+router.get('/:id', getVideoById);
+router.get('/', getAllVideos);
+router.post('/', upload.fields([{ name: 'thumbnail', maxCount: 1 }, { name: 'video', maxCount: 1 }]), uploadVideo);
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
