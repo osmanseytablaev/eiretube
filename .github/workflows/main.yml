@@ -47,7 +47,7 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_REGION: 'eu-north-1'  # Change to your AWS region
       run: |
-        aws s3 cp deploy-package.zip s3://eiretube/deploy-package.zip
+        aws s3 cp eiretube/backend/deploy-package.zip s3://eiretube/deploy-package.zip
         
     - name: Deploy to Elastic Beanstalk
       env:
