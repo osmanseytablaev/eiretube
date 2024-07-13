@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Deploy to AWS Elastic Beanstalk
 
 on:
   push:
@@ -6,33 +6,40 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '16'
+          node-version: '18.x'
 
       - name: Install dependencies
         run: npm install
-        working-directory: ./eiretube
 
-      - name: Build project
+      - name: Build frontend
+        working-directory: frontend
         run: npm run build
-        working-directory: ./eiretube
 
-      - name: Deploy to GitHub Pages
-        run: |
-          git config --global user.name 'github-actions[bot]'
-          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
-          npm install -g gh-pages
-          gh-pages -d build -r https://x-access-token:${{ secrets.ACTIONS_DEPLOY_KEY }}@github.com/${{ github.repository }}.git
+      - name: Copy frontend build to backend
+        run: cp -r frontend/build backend/build
+
+      - name: Zip files for deployment
+        run: zip -r deploy.zip backend
+
+      - name: Deploy to Elastic Beanstalk
         env:
-          GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-        working-directory: ./eiretube
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: 'eu-north-1'
+        run: |
+          pip install --upgrade awsebcli
+          eb init -p node.js my-app --region eu-north-1
+          eb use eiretube-env
+          eb deploy
+
 
