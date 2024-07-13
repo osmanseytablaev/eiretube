@@ -30,7 +30,7 @@ jobs:
 
     - name: Copy frontend build to backend
       run: |
-        cp -r eiretube/build/* eiretube/backend/build
+        cp -r eiretube/build/
 
     - name: Zip files for deployment
       run: |
