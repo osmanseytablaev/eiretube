@@ -20,9 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: ./eiretube
 
       - name: Build project
         run: npm run build
+        working-directory: ./eiretube
 
       - name: Deploy to GitHub Pages
         run: |
@@ -32,3 +34,4 @@ jobs:
           gh-pages -d build
         env:
           GITHUB_TOKEN: ${{ secrets.ACTIONS_DEPLOY_KEY }}
+        working-directory: ./eiretube
