@@ -28,9 +28,13 @@ jobs:
         cd eiretube
         npm run build
 
+    - name: Create build directory in backend
+      run: |
+        mkdir -p eiretube/backend/build
+
     - name: Copy frontend build to backend
       run: |
-        cp -r eiretube/build/
+        cp -r eiretube/build/* eiretube/backend/build/
 
     - name: Zip files for deployment
       run: |
