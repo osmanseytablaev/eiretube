@@ -22,11 +22,6 @@ jobs:
       run: |
         cd eiretube  # Navigate to the directory containing the package.json file
         npm install
-
-    - name: Fix vulnerabilities
-      run: |
-        cd eiretube
-        npm audit fix --force
         
     - name: Build frontend
       run: |
