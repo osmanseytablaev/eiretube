@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const videoRoutes = require('./routes/videos');
-const {join} = require("path"); // Ensure this path is correct
+const {join} = require("path");
 const app = express();
 
 require('dotenv').config();
