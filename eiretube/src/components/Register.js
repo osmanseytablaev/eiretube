@@ -11,7 +11,7 @@ function Register() {
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/register', {
+            const response = await axios.post('http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/register', {
                 username,
                 password,
             });

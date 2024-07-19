@@ -21,7 +21,7 @@ function UploadPage() {
         formData.append('video', video);
 
         try {
-            const response = await axios.post('http://localhost:5000/api/videos', formData, {
+            const response = await axios.post('http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/videos', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

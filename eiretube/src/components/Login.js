@@ -11,7 +11,7 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/login', {
+            const response = await axios.post('http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/login', {
                 username,
                 password,
             });
