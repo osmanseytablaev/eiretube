@@ -22,7 +22,7 @@ jobs:
       run: |
         cd eiretube  # Navigate to the directory containing the package.json file
         npm install
-
+        
     - name: Build frontend
       run: |
         cd eiretube
