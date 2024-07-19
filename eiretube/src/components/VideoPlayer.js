@@ -10,7 +10,7 @@ function VideoPlayer() {
     useEffect(() => {
         const fetchVideo = async () => {
             try {
-                const response = await axios.get(`http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/${id}`);
+                const response = await axios.get(`http://localhost:5000/api/videos/${id}`);
                 setVideo(response.data);
             } catch (error) {
                 console.error('Error fetching video:', error);
