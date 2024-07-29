@@ -7,17 +7,18 @@ function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-
+    const registerUrl = 'http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/api/auth/register';
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com/register', {
+            const response = await axios.post(registerUrl, {
                 username,
                 password,
             });
             localStorage.setItem('token', response.data.token);
             navigate('/'); // Redirect to home after successful registration
         } catch (error) {
+            console.error("Abra Gada  bra", registerUrl, error);
             console.error('Error during registration:', error);
             alert('Registration failed. Please try again.');
         }
