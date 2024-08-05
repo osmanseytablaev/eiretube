@@ -10,7 +10,7 @@ function VideoPlayer() {
     useEffect(() => {
         const fetchVideo = async () => {
             try {
-                const response = await axios.get(`https://ec2-13-60-73-114.eu-north-1.compute.amazonaws.com:5000/api/videos/${id}`);
+                const response = await axios.get(`https://ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:5000/api/videos/${id}`);
                 setVideo(response.data);
             } catch (error) {
                 console.error('Error fetching video:', error);

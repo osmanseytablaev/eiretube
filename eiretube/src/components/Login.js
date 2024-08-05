@@ -11,7 +11,7 @@ function Login() {
     const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://ec2-13-60-73-114.eu-north-1.compute.amazonaws.com:5000/api/auth/login', {
+            const response = await axios.post('https://ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:5000/api/auth/login', {
                 username,
                 password,
             });

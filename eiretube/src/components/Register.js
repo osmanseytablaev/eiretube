@@ -7,7 +7,7 @@ function Register() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const registerUrl = 'https://ec2-13-60-73-114.eu-north-1.compute.amazonaws.com:5000/api/auth/register';
+    const registerUrl = 'https://ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:5000/api/auth/register';
     const handleRegister = async (e) => {
         e.preventDefault();
         try {
