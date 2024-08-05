@@ -55,7 +55,7 @@ jobs:
         ssh -o StrictHostKeyChecking=no ec2-user@EC2_HOST << 'EOF'
           cd eiretube/eiretube
           npm install
-          npm run build # If you have a build step
+          npm run build
           npm start
         EOF
 
