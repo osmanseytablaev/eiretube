@@ -41,25 +41,22 @@ jobs:
         cd eiretube/backend
         zip -r deploy-package.zip .
 
-    - name: Deploy to EC2
-      env:
-        EC2_KEY: ${{ secrets.EC2_KEY }}
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-        EC2_USER: ${{ secrets.EC2_USER }}
-      run: |
-        echo "$EC2_KEY"
-        echo "$EC2_HOST"
-        echo "$EC2_USER"
-        scp -o StrictHostKeyChecking=no -i $EC2_KEY app.zip $EC2_USER@$EC2_HOST:/home/$EC2_USER/
-        ssh -o StrictHostKeyChecking=no -i $EC2_KEY $EC2_USER@$EC2_HOST 'unzip -o /home/$EC2_USER/app.zip -d /home/$EC2_USER/app && cd /home/$EC2_USER/app && npm install && pm2 restart all'
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.EC2_KEY }}
 
-    - name: Restart Nginx
-      env:
-        EC2_KEY: ${{ secrets.EC2_KEY }}
-        EC2_HOST: ${{ secrets.EC2_HOST }}
-        EC2_USER: ${{ secrets.EC2_USER }}
+    - name: Copy files to EC2
       run: |
-        ssh -o StrictHostKeyChecking=no -i $EC2_KEY $EC2_USER@$EC2_HOST 'sudo systemctl restart nginx'
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ec2-user@EC2_HOST:eiretube/eiretube
 
+    - name: Execute remote commands
+      run: |
+        ssh -o StrictHostKeyChecking=no ec2-user@EC2_HOST << 'EOF'
+          cd eiretube/eiretube
+          npm install
+          npm run build # If you have a build step
+          npm start
+        EOF
 
 
