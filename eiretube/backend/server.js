@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,8 +6,6 @@ const authRoutes = require('./routes/auth');
 const videoRoutes = require('./routes/videos');
 const {join} = require("path");
 const app = express();
-
-require('dotenv').config();
 
 const allowedOrigins = [
     'http://localhost:3000',
