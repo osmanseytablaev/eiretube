@@ -17,29 +17,6 @@ jobs:
       with:
         node-version: '18.x'
 
-    - name: Install dependencies
-      run: |
-        cd eiretube  # Navigate to the directory containing the package.json file
-        npm install
-        
-    - name: Build frontend
-      run: |
-        cd eiretube
-        npm run build
-
-    - name: Create build directory in backend
-      run: |
-        mkdir -p eiretube/backend/build
-
-    - name: Copy frontend build to backend
-      run: |
-        cp -r eiretube/build/* eiretube/backend/build/
-
-    - name: Zip files for deployment
-      run: |
-        cd eiretube/backend
-        zip -r deploy-package.zip .
-
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
@@ -52,7 +29,7 @@ jobs:
     - name: Install dotenv and other dependencies
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
-          cd eiretube/eiretube
+          cd eiretube/eiretube/backend
           npm install dotenv --save
           npm install
         EOF
