@@ -1,4 +1,4 @@
-name: Deploy to AWS Elastic Beanstalk
+name: Deploy to AWS EC2
 
 on:
   push:
@@ -50,13 +50,19 @@ jobs:
       run: |
         rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:eiretube/eiretube
 
-    - name: Execute remote commands
+    - name: Install dependencies and start application
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube/backend
           npm install
           npm run build
+          export MONGODB_URI=${{ secrets.MONGODB_URI }}
           npm start
+        EOF
+    - name: Check running processes
+      run: |
+        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-109.eu-north-1.compute.amazonaws.com << 'EOF'
+          ps aux | grep node # or the relevant process name
         EOF
 
 
