@@ -56,16 +56,17 @@ jobs:
           cd eiretube/eiretube/backend
           fuser -k 5000/tcp || true
           npm install dotenv --save
+          npm install react-scripts --save
           npm install
+          npm run build || echo "Build failed"
         EOF
 
     - name: Run build and start application
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
-          cd eiretube/eiretube
-          npm run build
-          export MONGODB_URI=${{ secrets.MONGODB_URI }}
           cd backend
+          npm install
+          export MONGODB_URI=${{ secrets.MONGODB_URI }}
           npm start
         EOF
     - name: Check running processes
