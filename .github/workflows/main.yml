@@ -55,6 +55,7 @@ jobs:
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube/backend
           fuser -k 5000/tcp || true
+          npm install dotenv --save
           npm install
           npm run build
           export MONGODB_URI=${{ secrets.MONGODB_URI }}
