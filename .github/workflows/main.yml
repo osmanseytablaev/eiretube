@@ -53,7 +53,7 @@ jobs:
     - name: Execute remote commands
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
-          cd eiretube/backend
+          cd eiretube/eiretube/backend
           npm install
           npm run build
           npm start
