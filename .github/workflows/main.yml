@@ -55,7 +55,6 @@ jobs:
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube
           npm install dotenv --save
-          npm install react-scripts --save
           npm install
         EOF
 
@@ -72,6 +71,7 @@ jobs:
           export MONGODB_URI=${{ secrets.MONGODB_URI }}
           cd eiretube/eiretube/backend
           fuser -k 5000/tcp || true
+          npm install react-scripts --save
           npm start
         EOF
     - name: Check running processes
