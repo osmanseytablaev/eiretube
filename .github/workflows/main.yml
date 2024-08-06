@@ -53,8 +53,7 @@ jobs:
     - name: Install dotenv and other dependencies
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
-          cd eiretube/eiretube/backend
-          fuser -k 5000/tcp || true
+          cd eiretube/eiretube
           npm install dotenv --save
           npm install react-scripts --save
           npm install
@@ -65,6 +64,7 @@ jobs:
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
           cd backend
+          fuser -k 5000/tcp || true
           npm install
           export MONGODB_URI=${{ secrets.MONGODB_URI }}
           npm start
