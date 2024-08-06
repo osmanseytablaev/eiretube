@@ -49,7 +49,7 @@ jobs:
     - name: Copy files to EC2
       run: |
         rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:eiretube/eiretube
-
+    
     - name: Install dotenv and other dependencies
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
@@ -57,16 +57,21 @@ jobs:
           npm install dotenv --save
           npm install react-scripts --save
           npm install
-          npm run build || echo "Build failed"
         EOF
 
-    - name: Run build and start application
+    - name: Build frontend
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
+          cd eiretube/eiretube
+          npm run build || echo "Build failed"
+        EOF
+        
+    - name: Start backend
+      run: |
+        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-171-253-100.eu-north-1.compute.amazonaws.com << 'EOF'
+          export MONGODB_URI=${{ secrets.MONGODB_URI }}
           cd eiretube/eiretube/backend
           fuser -k 5000/tcp || true
-          npm install
-          export MONGODB_URI=${{ secrets.MONGODB_URI }}
           npm start
         EOF
     - name: Check running processes
