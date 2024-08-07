@@ -29,8 +29,6 @@ jobs:
       env:
         MONGODB_URI: ${{ secrets.MONGODB_URI }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
-        
-    - name: Install dotenv and other dependencies
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube/backend
