@@ -1,16 +1,12 @@
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
+require('dotenv').config();
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const videoRoutes = require('./routes/videos');
 const {join} = require("path");
 const app = express();
 
-const allowedOrigins = [
-    'http://localhost:3000',
-    'http://eiretube-env.eba-sbdsqzzq.eu-north-1.elasticbeanstalk.com'
-];
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps, curl requests)
@@ -24,12 +20,18 @@ app.use(cors({
 
 app.use(express.json());
 
+console.log(`MONGODB_URI: ${process.env.MONGODB_URI}`);
 
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => console.log('MongoDB connected'))
     .catch(err => console.log(err));
+
+const connection = mongoose.connection;
+connection.once('open', () => {
+  console.log('MongoDB database connection established successfully');
+});
 
 app.use('/api/auth', authRoutes);
 app.use('/api/videos', videoRoutes);
