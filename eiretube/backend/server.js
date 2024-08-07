@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-require('dotenv').config();
+require('dotenv').config({ path: '.env' });
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
 const videoRoutes = require('./routes/videos');
