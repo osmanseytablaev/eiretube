@@ -45,6 +45,7 @@ jobs:
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
           export MONGODB_URI=${{ secrets.MONGODB_URI }}
+          echo "MONGODB_URI is set to $MONGODB_URI"
           cd eiretube/eiretube/backend
           fuser -k 5000/tcp || true
           npm install react-scripts --save
