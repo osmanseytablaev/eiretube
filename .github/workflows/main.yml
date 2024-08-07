@@ -61,4 +61,3 @@ jobs:
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
           ps aux | grep node # or the relevant process name
         EOF
-
