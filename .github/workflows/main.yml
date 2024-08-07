@@ -40,6 +40,7 @@ jobs:
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube
+          npm install react-scripts --save
           npm run build || echo "Build failed"
         EOF
         
