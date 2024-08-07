@@ -40,6 +40,11 @@ jobs:
           cd eiretube/eiretube
           npm run build || echo "Build failed"
         EOF
+
+    - name: SSH to EC2 and start backend
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
         
     - name: Start backend
       run: |
