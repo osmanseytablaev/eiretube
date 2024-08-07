@@ -24,7 +24,12 @@ jobs:
     - name: Copy files to EC2
       run: |
         rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com:eiretube/eiretube
-    
+
+    - name: SSH to EC2 and start backend
+      env:
+        MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        
     - name: Install dotenv and other dependencies
       run: |
         ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
@@ -39,11 +44,6 @@ jobs:
           cd eiretube/eiretube
           npm run build || echo "Build failed"
         EOF
-
-    - name: SSH to EC2 and start backend
-      env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
-        JWT_SECRET: ${{ secrets.JWT_SECRET }}
         
     - name: Start backend
       run: |
