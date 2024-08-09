@@ -43,10 +43,6 @@ jobs:
           npm run build || echo "Build failed"
         EOF
 
-    - name: Create build directory in backend
-      run: |
-        
-
     - name: Copy frontend build to backend
       run: |
         mkdir -p eiretube/backend/build
