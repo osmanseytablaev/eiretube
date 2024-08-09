@@ -21,7 +21,7 @@ function UploadPage() {
         formData.append('video', video);
 
         try {
-            const response = await axios.post('http://ec2-51-20-83-93.eu-north-1.compute.amazonaws.com:5000/api/videos', formData, {
+            const response = await axios.post('https://ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:5000/api/videos', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

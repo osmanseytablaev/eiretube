@@ -9,7 +9,7 @@ function HomePage() {
     useEffect(() => {
         const fetchVideos = async () => {
             try {
-                const response = await axios.get('http://ec2-51-20-83-93.eu-north-1.compute.amazonaws.com:5000/api/videos');
+                const response = await axios.get('https://ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:5000/api/videos');
                 setVideos(response.data);
             } catch (error) {
                 console.error('Error fetching videos:', error);

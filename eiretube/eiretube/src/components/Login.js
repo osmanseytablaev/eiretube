@@ -1,33 +1,32 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './Register.css';
+import './Login.css';
 
-function Register() {
+function Login() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const registerUrl = 'http://ec2-51-20-83-93.eu-north-1.compute.amazonaws.com:5000/api/auth/register';
-    const handleRegister = async (e) => {
+
+    const handleLogin = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(registerUrl, {
+            const response = await axios.post('https://ec2-16-171-253-100.eu-north-1.compute.amazonaws.com:5000/api/auth/login', {
                 username,
                 password,
             });
             localStorage.setItem('token', response.data.token);
-            navigate('/'); // Redirect to home after successful registration
+            navigate('/');
         } catch (error) {
-            console.error("Abra Gada  bra", registerUrl, error);
-            console.error('Error during registration:', error);
-            alert('Registration failed. Please try again.');
+            console.error('Error during login:', error);
+            alert('Login failed. Please try again.');
         }
     };
 
     return (
-        <div className="register-container">
-            <h2>Register</h2>
-            <form onSubmit={handleRegister}>
+        <div className="login-container">
+            <h2>Login</h2>
+            <form onSubmit={handleLogin}>
                 <label>
                     Username:
                     <input
@@ -44,13 +43,16 @@ function Register() {
                         onChange={(e) => setPassword(e.target.value)}
                     />
                 </label>
-                <button type="submit">Register</button>
+                <button type="submit">Login</button>
             </form>
         </div>
     );
 }
 
-export default Register;
+export default Login;
+
+
+
 
 
 
