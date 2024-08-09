@@ -51,7 +51,6 @@ jobs:
           export MONGODB_URI=${{ secrets.MONGODB_URI }}
           echo "MONGODB_URI is set to $MONGODB_URI"
           fuser -k 5000/tcp || true
-          sudo service mongod start
           npm install react-scripts --save
           npm start
         EOF
