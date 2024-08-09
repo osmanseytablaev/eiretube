@@ -2,7 +2,7 @@ name: Deploy to AWS EC2
 on:
   push:
     branches:
-      - main
+      - dev
 
 jobs:
   deploy:
@@ -23,14 +23,13 @@ jobs:
 
     - name: Copy files to EC2
       run: |
-        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com:eiretube/eiretube
+        rsync -avz -e "ssh -o StrictHostKeyChecking=no" ./ ec2-user@ec2-51-20-83-93.eu-north-1.compute.amazonaws.com:eiretube/eiretube
 
     - name: SSH to EC2 and start backend
       env:
-        MONGODB_URI: ${{ secrets.MONGODB_URI }}
         JWT_SECRET: ${{ secrets.JWT_SECRET }}
       run: |
-        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
+        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-51-20-83-93.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube/backend
           npm install dotenv --save
           npm install
@@ -38,24 +37,33 @@ jobs:
 
     - name: Build frontend
       run: |
-        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
+        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-51-20-83-93.eu-north-1.compute.amazonaws.com << 'EOF'
           cd eiretube/eiretube
           npm install react-scripts --save
           npm run build || echo "Build failed"
         EOF
+
+    - name: Create build directory in backend
+      run: |
+        
+
+    - name: Copy frontend build to backend
+      run: |
+        mkdir -p eiretube/backend/build
+        cp -r eiretube/build/* eiretube/backend/build/
         
     - name: Start backend
       run: |
-        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
-          cd eiretube/eiretube/backend
-          export MONGODB_URI=${{ secrets.MONGODB_URI }}
+        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-51-20-83-93.eu-north-1.compute.amazonaws.com << 'EOF'
+          export MONGODB_URI=mongodb://osman-dev:dev3000@ec2-51-20-83-93.eu-north-1.compute.amazonaws.com:27017/eiretube-dev
           echo "MONGODB_URI is set to $MONGODB_URI"
+          cd eiretube/eiretube/backend
           fuser -k 5000/tcp || true
           npm install react-scripts --save
           npm start
         EOF
     - name: Check running processes
       run: |
-        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-16-170-203-179.eu-north-1.compute.amazonaws.com << 'EOF'
+        ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-51-20-83-93.eu-north-1.compute.amazonaws.com << 'EOF'
           ps aux | grep node # or the relevant process name
         EOF

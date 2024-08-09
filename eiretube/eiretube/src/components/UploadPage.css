@@ -1,0 +1,27 @@
+.upload-page {
+    padding: 20px;
+    text-align: center;
+}
+
+.upload-page form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.upload-page form div {
+    margin-bottom: 10px;
+}
+
+.upload-page button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.upload-page p {
+    margin-top: 20px;
+    font-size: 18px;
+    color: green;
+}
+

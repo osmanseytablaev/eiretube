@@ -7,11 +7,6 @@ const videoRoutes = require('./routes/videos');
 const {join} = require("path");
 const app = express();
 
-
-const allowedOrigins = [
-  'http://ec2-51-20-83-93.eu-north-1.compute.amazonaws.com:5000'
-];
-
 app.use(cors({
     origin: function (origin, callback) {
         if (!origin) return callback(null, true); // Allow requests with no origin (like mobile apps, curl requests)
