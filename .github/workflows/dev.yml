@@ -49,8 +49,6 @@ jobs:
 
     - name: Copy frontend build to backend
       run: |
-        cd eiretube
-        ls
         mkdir -p eiretube/backend/build
         cp -r eiretube/build/* eiretube/backend/build/
         
