@@ -45,10 +45,11 @@ jobs:
 
     - name: Create build directory in backend
       run: |
-        mkdir -p eiretube/backend/build
+        mkdir -p eiretube/eiretube/backend/build
 
     - name: Copy frontend build to backend
       run: |
+        cd eiretube
         cp -r eiretube/build/* eiretube/backend/build/
         
     - name: Start backend
